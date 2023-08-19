@@ -1,7 +1,14 @@
 {
   "dependencies": {
+    "com.redowl.unity-json": {
+      "version": "https://github.com/red-owl-games/unity-json.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "9b4fb48e77d0af38006856fe12b51e3dbfb48dbb"
+    },
     "com.unity.collab-proxy": {
-      "version": "2.0.5",
+      "version": "2.0.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
