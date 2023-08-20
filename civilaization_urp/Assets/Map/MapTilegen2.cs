@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using RedOwl.Engine;
 using UnityEngine;
 using System;
+using System.Collections;
 
 struct SceneTile
 {
@@ -33,7 +34,6 @@ public class MapTilegen2 : MonoBehaviour
     
     // Scene + Rendering
     [SerializeField] private GameObject tileObj;
-    [SerializeField] private Material mat; // *** materials for each nation
     [SerializeField] private Texture2D depth;
     private int matColorID;
 
@@ -49,9 +49,11 @@ public class MapTilegen2 : MonoBehaviour
     [SerializeField] private float captureAnimSpeed;
     [SerializeField] private float captureAnimTime;
     
+    [SerializeField] private Transform referenceOriginTransform;
     private float lastSelectedTime = 0f;
     private int totalTiles;
     private int canadaID;
+    private int captureID;
     
     void LoadJSON()
     {
@@ -135,6 +137,12 @@ public class MapTilegen2 : MonoBehaviour
             ++saveCuba;
         }
         
+        while (canadaID < leaders.Count)
+        {
+            if (leaders[canadaID].isoID == "CA") break;
+            ++canadaID;
+        }
+        
         int ind = 0;
         for (int i = 0; i < tilemap.Count; ++i)
         {
@@ -174,7 +182,6 @@ public class MapTilegen2 : MonoBehaviour
         UpdatePositions();
         
         boundingBoxes = new Bounds[leaders.Count + 1];
-        // Goofyf
     }
 
     void Update()
@@ -206,7 +213,7 @@ public class MapTilegen2 : MonoBehaviour
 
     private Vector3 getPosition(int x, int z, int ind, float vertical)
     {
-        return new Vector3((x + z * 0.5f - z / 2) * innerRadius * 2f, depths[ind] * (beginAnimationLerp + extrusion) + vertical, z * outerRadius * 2f);
+        return new Vector3((x + z * 0.5f - z / 2) * innerRadius * 2f, depths[ind] * (beginAnimationLerp + extrusion) + vertical + Mathf.Sin(z * 0.357f + Time.time) * 0.437f, z * outerRadius * 2f);
     }
     
     private void UpdatePositions()
@@ -236,7 +243,6 @@ public class MapTilegen2 : MonoBehaviour
 
     public void DeselectLand()
     {
-        Debug.Log("???");
         gameMan.LeaderSelected(null);
     }
 
@@ -262,13 +268,21 @@ public class MapTilegen2 : MonoBehaviour
                 if (ind == id)
                 {
                     int tileID = tilemap[i][j];
-                    Debug.Log(raw_tilemap[i][j]);
+                    Debug.Log(tileID);
                                 
                     if (tileID >= 0 && tileID < leaders.Count)
                     {
-                        Debug.Log(leaders[tileID]);
-                        gameMan.LeaderSelected(leaders[tileID]);
-                        lastSelectedTime = 0;
+                        //Debug.Log(leaders[tileID]);
+
+                        if (tileID != canadaID)
+                        {
+                            gameMan.LeaderSelected(leaders[tileID]);
+                            lastSelectedTime = 0;
+                        }
+                        else
+                        {
+                            Debug.Log(tileID);
+                        }
                     }
                     else if (tileID < 0)
                     {
@@ -282,14 +296,27 @@ public class MapTilegen2 : MonoBehaviour
 
     public void Capture(Leader leader)
     {
-        int captureIndex = leaders.IndexOf(leader);
+        captureID = leaders.IndexOf(leader);
+        int ind = 0;
         for (int i = 0; i < tilemap.Count; ++i)
         {
             for (int j = 0; j < tilemap[i].Count; ++j)
             {
                 int id = tilemap[i][j];
-                //time[i][j]
+                if (id == captureIndex)
+                {
+                    tilemap[i][j] = canadaID;
+                    sceneTiles[ind].renderer.material = leaders[canadaID].material;
+                }
+
+                ++ind;
             }
         }
+    }
+
+    public IEnumerator CaptureAnim()
+    {
+        yield return WaitForSeconds(1f);
+        gameMan
     }
 }
