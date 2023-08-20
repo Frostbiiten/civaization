@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv(".env")
 user = os.getenv("geouser")
 
-session = requests_cache.CachedSession('grid_cache_5')
+session = requests_cache.CachedSession('grid_cache_6')
 
 width = 60
 height = 120
@@ -16,11 +16,14 @@ ids = {'NULL' : 0}
 ids3 = []
 grid = []
 
+keys = ["arihan10", "frostbiiten", "edemh"]
+
+counter = 0
 for y in range(height):
     row = []
-    if y > height * 0.60:
-        user = "frostbiiten"
     for x in range(width - 1):
+        user = keys[counter % 3]
+
         basey = y 
         if (x % 2 == 0): basey += 0.5
         params = {'username' : user, 'lat' : -(x / width * 180 - 90), 'lng' : basey / height * 360 - 180}
@@ -38,9 +41,10 @@ for y in range(height):
                 ids3.append(code)
         row.append(id)
         p = ((y * width + x) / (width * height) * 100)
-        if (p % 5 < 0.000001):
-            print(p)
+        if (p % 2 < 0.000001):
             print(req.text)
+            print(p)
+        counter  += 1
     grid.append(row)
 
 dump_data = {"width": width, "height": height, "ids": ids3, "grid": grid}

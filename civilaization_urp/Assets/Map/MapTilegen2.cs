@@ -18,6 +18,7 @@ struct SceneTile
 public class MapTilegen2 : MonoBehaviour
 {
     // Load Data
+    private List<List<int>> raw_tilemap;
     private List<List<int>> tilemap;
     private int width, height;
     private float[] depths;
@@ -49,8 +50,9 @@ public class MapTilegen2 : MonoBehaviour
     [SerializeField] private float captureAnimTime;
     
     private float lastSelectedTime = 0f;
-    
     private int totalTiles;
+    private int canadaID;
+    
     void LoadJSON()
     {
         IDToISO = new Dictionary<int, String>();
@@ -62,6 +64,7 @@ public class MapTilegen2 : MonoBehaviour
         width = tileJson["width"];
         height = tileJson["height"];
         tilemap = new List<List<int>>(height);
+        raw_tilemap = new List<List<int>>(height);
 
         int i = 0;
         foreach (Json entry in tileJson["ids"])
@@ -75,9 +78,11 @@ public class MapTilegen2 : MonoBehaviour
         foreach (Json row in tileJson["grid"])
         {
             List<int> gridRow = new List<int>(width);
+            List<int> gridRowRaw = new List<int>(width);
             foreach (Json cell in row)
             {
                 int id = cell;
+                gridRowRaw.Add(id);
                 
                 // Collapse id
                 // -1 = water
@@ -111,6 +116,7 @@ public class MapTilegen2 : MonoBehaviour
                 ++totalTiles;
             }
             tilemap.Add(gridRow);
+            raw_tilemap.Add(gridRow);
         }
     }
     
@@ -256,10 +262,11 @@ public class MapTilegen2 : MonoBehaviour
                 if (ind == id)
                 {
                     int tileID = tilemap[i][j];
+                    Debug.Log(raw_tilemap[i][j]);
                                 
                     if (tileID >= 0 && tileID < leaders.Count)
                     {
-                        //Debug.Log(leaders[tileID]);
+                        Debug.Log(leaders[tileID]);
                         gameMan.LeaderSelected(leaders[tileID]);
                         lastSelectedTime = 0;
                     }
@@ -275,13 +282,14 @@ public class MapTilegen2 : MonoBehaviour
 
     public void Capture(Leader leader)
     {
+        int captureIndex = leaders.IndexOf(leader);
         for (int i = 0; i < tilemap.Count; ++i)
         {
             for (int j = 0; j < tilemap[i].Count; ++j)
             {
-
+                int id = tilemap[i][j];
+                //time[i][j]
             }
-
         }
     }
 }

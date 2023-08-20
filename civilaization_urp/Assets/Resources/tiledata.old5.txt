@@ -2,6 +2,7 @@
     "width": 39,
     "height": 60,
     "ids": [
+        "NULL",
         "RU",
         "US",
         "AQ",
