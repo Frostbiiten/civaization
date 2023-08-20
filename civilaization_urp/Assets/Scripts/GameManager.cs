@@ -118,7 +118,7 @@ public class GameManager : MonoBehaviour
             Deselect();
             return; 
         }
-        if (leader.status == "Annexed") return; 
+        if (_leader.status == "Annexed") return; 
 
         UI.gameObject.SetActive(true); 
         nameText.text = _leader.name; 
