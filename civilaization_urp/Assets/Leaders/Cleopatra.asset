@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 341b22b4a547788499326a95d1b83573, type: 3}
   m_Name: Cleopatra
   m_EditorClassIdentifier: 
-  name: Xi Jin Ping
+  name: Cleopetra
   status: Neutral
   troops: 200000
   sprite: {fileID: 0}
-  material: {fileID: 2100000, guid: da3a8060c6dd4d34b84e2605dc3187d6, type: 2}
-  isoID: EG

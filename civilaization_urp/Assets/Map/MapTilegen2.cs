@@ -40,6 +40,8 @@ public class MapTilegen2 : MonoBehaviour
 
     [SerializeField] private float beginAnimationLerp = 1000f;
     [SerializeField] private float extrusion = 20f;
+
+    private GameManager gameMan;
     
     private int totalTiles;
     void LoadJSON()
@@ -61,8 +63,6 @@ public class MapTilegen2 : MonoBehaviour
             ISOtoID.Add(entry, i);
             ++i;
         }
-
-        Debug.Log(ISOtoID["RU"]);
         
         totalTiles = 0;
         foreach (Json row in tileJson["grid"])
@@ -129,6 +129,7 @@ public class MapTilegen2 : MonoBehaviour
                 
                 GameObject newTile = Instantiate(tileObj, transform);
                 sceneTiles[ind] = new SceneTile(newTile);
+                newTile.name = ind.ToString();
 
                 if (id >= 0 && id < leaders.Count)
                 {
@@ -177,6 +178,18 @@ public class MapTilegen2 : MonoBehaviour
                 sceneTiles[ind].transform.position = pos;
                 ++ind;
             }
+        }
+    }
+
+    public void SelectTile(int id)
+    {
+        Debug.Log(id);
+        if (id >= 0 && id < leaders.Count)
+        {
+            int x = id / tilemap.Count;
+            int y = id - x * tilemap.Count;
+            int tileID = tilemap[x][y];
+            gameMan.LeaderSelected(leaders[tileID]);
         }
     }
 }

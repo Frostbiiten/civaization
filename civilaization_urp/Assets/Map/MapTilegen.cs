@@ -1,59 +1,44 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using RedOwl.Engine;
 using UnityEngine;
-using System;
 
-public struct TileInstanceData
+public class Nation
 {
-    public Matrix4x4 objectToWorld;
-    public uint renderingLayerMask;
-};
-
-public class NationRender
-{
-    public TileInstanceData[] renderInstanceData;
-
-    public NationRender(int size)
-    {
-        renderInstanceData = new TileInstanceData[size];
-    }
+    private String iso;
+    //private 
 }
 
 public class MapTilegen : MonoBehaviour
 {
-    // Load Data
+    // data
     private Dictionary<int, String> ids;
-    private Dictionary<String, int> reverse_ids;
-    
     private List<List<int>> tilemap;
     private int width, height;
     
-    // Drawing
-    [SerializeField] private float innerRadius;
+    // drawing
+    private Matrix4x4 transformations, prevTransformations;
+    [SerializeField] private float innerRadius, scale;
     private float outerRadius;
     [SerializeField] private Mesh tileMesh;
     [SerializeField] private Material mat; // *** materials for each nation
-    
-    // Nation renderers
-    private Dictionary<int, NationRender> renderers = new();
-    
-    private TileInstanceData[] renderInstanceData;
 
-    [SerializeField] private List<Leader> leaders;
-    private Dictionary<int, Leader> _leadersDict;
-    private const int nonaligned = 99;
+    private Transform tileposRef;
     
-    // Collapse all other IDs to one misc nation
-    void TransformID(int id)
+    // nations
+    private List<Nation> nations = new List<Nation>();
+    
+    struct TileInstanceData
     {
-        
-    }
-    
-    void LoadJSON()
+        public Matrix4x4 objectToWorld;
+        public uint renderingLayerMask;
+    };
+
+    private TileInstanceData[] renderInstanceData;
+    void Awake()
     {
         ids = new Dictionary<int, String>();
-        reverse_ids = new Dictionary<String, int>();
-        
         TextAsset tileData = Resources.Load<TextAsset>("tiledata");
         Json tileJson = Json.Deserialize(tileData.text);
 
@@ -65,7 +50,6 @@ public class MapTilegen : MonoBehaviour
             try
             {
                 ids.Add(ids.Count, entry);
-                reverse_ids.Add(entry, ids.Count);
             }
             catch (Exception e)
             {
@@ -74,7 +58,6 @@ public class MapTilegen : MonoBehaviour
                 throw;
             }
         }
-
         foreach (Json row in tileJson["grid"])
         {
             List<int> gridRow = new List<int>(width);
@@ -85,18 +68,10 @@ public class MapTilegen : MonoBehaviour
             }
             tilemap.Add(gridRow);
         }
-    }
-    
-    void Awake()
-    {
-        LoadJSON();
+
+        renderInstanceData = new TileInstanceData[width * height];
     }
 
-    private void UpdateMesh(int id)
-    {
-        
-    }
-    
     private void Update()
     {
         outerRadius = innerRadius * 0.866025404f;
@@ -109,6 +84,7 @@ public class MapTilegen : MonoBehaviour
             {
                 renderInstanceData[c] = new TileInstanceData();
                 renderInstanceData[c].objectToWorld = Matrix4x4.Translate(new Vector3((x + z * 0.5f - z / 2) * innerRadius * 2f, Mathf.Pow(x, 0.3f) * -3f, z * outerRadius * 2f));
+                //if (tilemap[z][x] == 0) renderInstanceData[c].objectToWorld *= Matrix4x4.Translate(new Vector3(0, -999999, 0)); // :skull:
                 if (tilemap[z][x] == 0) renderInstanceData[c].objectToWorld *= Matrix4x4.Translate(new Vector3(0, -999999, 0)); // :skull:
                 ++c;
             }

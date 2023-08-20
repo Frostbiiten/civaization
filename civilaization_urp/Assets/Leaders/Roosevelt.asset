@@ -16,5 +16,3 @@ MonoBehaviour:
   status: Neutral
   troops: 2000000
   sprite: {fileID: 0}
-  material: {fileID: 2100000, guid: c69e4497434e1554892c483885f705ef, type: 2}
-  isoID: US

@@ -7,10 +7,10 @@ from dotenv import load_dotenv
 load_dotenv(".env")
 user = os.getenv("geouser")
 
-session = requests_cache.CachedSession('grid_cache_3')
+session = requests_cache.CachedSession('grid_cache_4')
 
-width = 40
-height = 80
+width = 60
+height = 120
 
 ids = {'NULL' : 0}
 ids3 = []
