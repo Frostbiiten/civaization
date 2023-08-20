@@ -9,8 +9,8 @@ user = os.getenv("geouser")
 
 session = requests_cache.CachedSession('grid_cache_3')
 
-width = 39
-height = 60
+width = 40
+height = 80
 
 ids = {'NULL' : 0}
 ids3 = []
@@ -33,17 +33,15 @@ for y in range(height):
             else:
                 id = len(ids)
                 ids[code] = id
+                ids3.append(code)
         row.append(id)
         p = ((y * width + x) / (width * height) * 100)
         if (p % 5 < 0.000001):
             print(p)
+            print(req.text)
     grid.append(row)
 
-ids2 = []
-for i in range(len(ids)):
-    ids2.append(ids[str(i)])
-
-dump_data = {"width": width, "height": height, "ids": ids2, "grid": grid}
+dump_data = {"width": width, "height": height, "ids": ids3, "grid": grid}
 f = open(f"tiledata {datetime.today().strftime('%Y-%m-%d %H-%M-%S')}.json", "w")
 json.dump(dump_data, f, indent=4)
 f.close()
