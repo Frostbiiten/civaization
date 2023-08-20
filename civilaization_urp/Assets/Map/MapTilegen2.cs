@@ -58,6 +58,10 @@ public class MapTilegen2 : MonoBehaviour
     private float lastSelectedTime = 0f;
     private int totalTiles;
     private int canadaID, captureID = -1, allyID = -1;
+
+    [SerializeField] private CameraScript cam;
+
+    [SerializeField] private float zoomAmt, unzoomAmt;
     
     void LoadJSON()
     {
@@ -343,24 +347,21 @@ public class MapTilegen2 : MonoBehaviour
                 if (ind == id)
                 {
                     int tileID = tilemap[i][j];
-                    Debug.Log(tileID);
                                 
-                    if (tileID >= 0 && tileID < leaders.Count)
+                    if (tileID >= 0 && tileID < leaders.Count && tileID != canadaID)
                     {
                         //Debug.Log(leaders[tileID]);
-
-                        if (tileID != canadaID)
-                        {
-                            gameMan.LeaderSelected(leaders[tileID]);
-                            lastSelectedTime = 0;
-                        }
-                        else
-                        {
-                            Debug.Log(tileID);
-                        }
+                        gameMan.LeaderSelected(leaders[tileID]);
+                        cam.SetTarget(centers[tileID], zoomAmt);
+                        lastSelectedTime = 0;
                     }
-                    else if (tileID < 0)
+                    else //if (tileID < 0)
                     {
+                        if (tileID < 0)
+                        {
+                            cam.Reset();
+                        }
+                        
                         DeselectLand();
                     }
                 }
