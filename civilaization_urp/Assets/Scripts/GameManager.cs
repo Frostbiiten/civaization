@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
     {
         var initialPrompt = Resources.Load<TextAsset>("initial");
 
-        //UI.gameObject.SetActive(false); 
+        UI.gameObject.SetActive(false); 
 
         AskGPT(initialPrompt.text, "system"); 
     }
@@ -135,7 +135,6 @@ public class GameManager : MonoBehaviour
 
     public void ProgressSequence() {
         if (!editeable) return;
-        editeable = false; 
 
         ++seqIndex;
         Debug.Log(seqLeaders[seqIndex].name);
@@ -146,10 +145,16 @@ public class GameManager : MonoBehaviour
         if (_action.Contains("loses")) 
         {
             tilegen2.Capture(seqLeaders[seqIndex]);
+            editeable = false; 
         }
         else if (_action.Contains("captures") && _action.Contains("canada"))
         {
             // Game over
+        } else if (_action.Contains("gives"))
+        {
+            // alliance
+            tilegen2.Allegiance(seqLeaders[seqIndex]);
+            editeable = false; 
         }
 
         if (seqIndex < seqLeaders.Count - 1) {

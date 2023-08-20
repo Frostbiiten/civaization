@@ -39,7 +39,7 @@ public class MapTilegen : MonoBehaviour
     void Awake()
     {
         ids = new Dictionary<int, String>();
-        TextAsset tileData = Resources.Load<TextAsset>("tiledata");
+        TextAsset tileData = Resources.Load<TextAsset>("tiledata_2");
         Json tileJson = Json.Deserialize(tileData.text);
 
         width = tileJson["width"];

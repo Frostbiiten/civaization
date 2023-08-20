@@ -9,8 +9,8 @@ user = os.getenv("geouser")
 
 session = requests_cache.CachedSession('grid_cache_6')
 
-width = 60
-height = 120
+width = 55
+height = 110
 
 ids = {'NULL' : 0}
 ids3 = []
