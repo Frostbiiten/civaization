@@ -303,7 +303,7 @@ public class MapTilegen2 : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
 
-        int ind;
+        int ind = 0;
         for (int i = 0; i < tilemap.Count; ++i)
         {
             for (int j = 0; j < tilemap[i].Count; ++j)
