@@ -113,8 +113,11 @@ public class GameManager : MonoBehaviour
     }
 
     public void LeaderSelected(Leader _leader) {
-        if (seqIndex < seqLeaders.Count - 1) return; 
-        if (_leader == null) Deselect(); 
+        if (seqIndex < seqLeaders.Count - 1) return;
+        if (_leader == null) {
+            Deselect();
+            return; 
+        }
         if (leader.status == "Annexed") return; 
 
         UI.gameObject.SetActive(true); 
