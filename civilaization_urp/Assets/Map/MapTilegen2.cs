@@ -297,13 +297,19 @@ public class MapTilegen2 : MonoBehaviour
     public void Capture(Leader leader)
     {
         captureID = leaders.IndexOf(leader);
-        int ind = 0;
+    }
+
+    public IEnumerator CaptureAnim()
+    {
+        yield return new WaitForSeconds(2f);
+
+        int ind;
         for (int i = 0; i < tilemap.Count; ++i)
         {
             for (int j = 0; j < tilemap[i].Count; ++j)
             {
                 int id = tilemap[i][j];
-                if (id == captureIndex)
+                if (id == captureID)
                 {
                     tilemap[i][j] = canadaID;
                     sceneTiles[ind].renderer.material = leaders[canadaID].material;
@@ -312,11 +318,5 @@ public class MapTilegen2 : MonoBehaviour
                 ++ind;
             }
         }
-    }
-
-    public IEnumerator CaptureAnim()
-    {
-        yield return WaitForSeconds(1f);
-        gameMan
     }
 }
