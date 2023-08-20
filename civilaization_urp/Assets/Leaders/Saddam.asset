@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Saddam Hussein
   status: Neutral
+  message: 
+  action: 
   troops: 350000
   sprite: {fileID: 0}
+  material: {fileID: 2100000, guid: 8536651908f306542b26484c71c92b2d, type: 2}
+  isoID: IQ

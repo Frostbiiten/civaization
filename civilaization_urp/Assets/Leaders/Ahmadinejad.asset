@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Mahmoud Ahmadinejad
   status: Neutral
+  message: 
+  action: 
   troops: 600000
   sprite: {fileID: 0}
+  material: {fileID: 2100000, guid: 32fb686d3d36940479f44171b9ac82e4, type: 2}
+  isoID: IR

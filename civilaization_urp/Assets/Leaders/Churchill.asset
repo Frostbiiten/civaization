@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Winston Churchill
   status: Neutral
+  message: 
+  action: 
   troops: 200000
   sprite: {fileID: 0}
+  material: {fileID: 2100000, guid: b48ca0807a206ab44ad488f56c25960c, type: 2}
+  isoID: GB

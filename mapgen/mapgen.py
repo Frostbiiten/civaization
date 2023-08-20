@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv(".env")
 user = os.getenv("geouser")
 
-session = requests_cache.CachedSession('grid_cache_4')
+session = requests_cache.CachedSession('grid_cache_5')
 
 width = 60
 height = 120
@@ -18,6 +18,8 @@ grid = []
 
 for y in range(height):
     row = []
+    if y > height * 0.60:
+        user = "frostbiiten"
     for x in range(width - 1):
         basey = y 
         if (x % 2 == 0): basey += 0.5

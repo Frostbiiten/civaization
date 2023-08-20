@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Nelson Mandela
   status: Neutral
+  message: 
+  action: 
   troops: 100000
   sprite: {fileID: 0}
+  material: {fileID: 2100000, guid: 0ff52a5575917fe4faa5b0267b50dfbd, type: 2}
+  isoID: ZA

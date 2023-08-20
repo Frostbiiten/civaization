@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     List<ChatMessage> messages = new List<ChatMessage>();
 
     [SerializeField] Leader[] leaders; 
-    Leader leader;
+    public Leader leader;
 
     public List<Leader> seqLeaders = new List<Leader>();
 
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
             // string chat = chatResponse.Content;
             string newChat = "";
             for (int i = 0; i < chatResponse.Content.Length; ++i) {
-                if (chatResponse.Content[i] == '”' || chatResponse.Content[i] == '“') newChat += "\"";
+                if (chatResponse.Content[i] == 'â€' || chatResponse.Content[i] == 'â€œ') newChat += "\"";
                 else newChat += chatResponse.Content[i]; 
             }
 
@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
                 currLeader.message = _leader["Message"];
                 currLeader.action = _leader["Action"];
                 currLeader.status = _leader["Status"]; 
-
+                Debug.Log(currLeader.message);
                 seqLeaders.Add(currLeader); 
             }
 
@@ -112,8 +112,9 @@ public class GameManager : MonoBehaviour
         AskGPT(leader.name, inputMsg.text, action, "user"); 
     }
 
-    public void LeaderSelected(Leader _leader) {
-        if (seqIndex < seqLeaders.Count - 1) return;
+    public void LeaderSelected(Leader _leader)
+    {
+        // if (seqIndex < seqLeaders.Count - 1) return;
         if (_leader == null) {
             Deselect();
             return; 
@@ -132,13 +133,17 @@ public class GameManager : MonoBehaviour
 
     public void ProgressSequence() {
         ++seqIndex;
+        Debug.Log(seqLeaders[seqIndex].name);
 
         LeaderSelected(seqLeaders[seqIndex]);
 
         string _action = seqLeaders[seqIndex].action.ToLower(); 
-        if (_action.Contains("loses")) {
+        if (_action.Contains("loses")) 
+        {
             // This country loses to Canada, big L
-        } else if (_action.Contains("captures") && _action.Contains("canada")) {
+        }
+        else if (_action.Contains("captures") && _action.Contains("canada"))
+        {
             // Game over
         }
 

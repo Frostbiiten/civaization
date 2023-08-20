@@ -3,7 +3,6 @@ using UnityEngine;
 public class CameraScript : MonoBehaviour
 {
     [SerializeField] private Camera cam;
-    [SerializeField] private LayerMask tilesMask;
     [SerializeField] private MapTilegen2 tileGen;
     private RaycastHit info;
 
@@ -13,13 +12,12 @@ public class CameraScript : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out info, Mathf.Infinity, tilesMask.value))
+            if (Physics.Raycast(ray, out info, Mathf.Infinity))
             {
-                tileGen.SelectTile(int.Parse(info.collider.gameObject.name));
-            }
-            else
-            {
-                tileGen.DeselectLand();
+                if (info.collider.gameObject.layer == LayerMask.NameToLayer("Tile"))
+                {
+                    tileGen.SelectTile(int.Parse(info.collider.gameObject.name));
+                }
             }
         }
     }

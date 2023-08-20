@@ -37,11 +37,18 @@ public class MapTilegen2 : MonoBehaviour
     private int matColorID;
 
     [SerializeField] private List<Leader> leaders;
+    private Bounds[] boundingBoxes;
 
     [SerializeField] private float beginAnimationLerp = 1000f;
     [SerializeField] private float extrusion = 20f;
 
     [SerializeField] private GameManager gameMan;
+
+    [SerializeField] private AnimationCurve captureCurve;
+    [SerializeField] private float captureAnimSpeed;
+    [SerializeField] private float captureAnimTime;
+    
+    private float lastSelectedTime = 0f;
     
     private int totalTiles;
     void LoadJSON()
@@ -63,7 +70,7 @@ public class MapTilegen2 : MonoBehaviour
             ISOtoID.Add(entry, i);
             ++i;
         }
-        
+
         totalTiles = 0;
         foreach (Json row in tileJson["grid"])
         {
@@ -114,6 +121,13 @@ public class MapTilegen2 : MonoBehaviour
         // Rendering Setup
         sceneTiles = new SceneTile[totalTiles];
         depths = new float[totalTiles];
+
+        int saveCuba = 0;
+        while (saveCuba < leaders.Count)
+        {
+            if (leaders[saveCuba].isoID == "CU") break;
+            ++saveCuba;
+        }
         
         int ind = 0;
         for (int i = 0; i < tilemap.Count; ++i)
@@ -123,10 +137,21 @@ public class MapTilegen2 : MonoBehaviour
             {
                 float yFrac = 1 - j / (float)tilemap[i].Count;
 
-                depths[ind] = distribute(depth.GetPixel((int)(xFrac * depth.width), (int)(yFrac * depth.height)).r);
+                if (j == 0)
+                {
+                    depths[ind] = -0.7f;
+                }
+                else if (tilemap[i][j] == saveCuba)
+                {
+                    depths[ind] = 0.4f;
+                }
+                else
+                {
+                    depths[ind] = distribute(depth.GetPixel((int)(xFrac * depth.width), (int)(yFrac * depth.height)).r) - 0.7f;
+                }
                 
                 int id = tilemap[i][j];
-                
+
                 GameObject newTile = Instantiate(tileObj, transform);
                 sceneTiles[ind] = new SceneTile(newTile);
                 newTile.name = ind.ToString();
@@ -138,14 +163,18 @@ public class MapTilegen2 : MonoBehaviour
                 ++ind;
             }
         }
-
+        
         matColorID = Shader.PropertyToID("_Color");
         UpdatePositions();
+        
+        boundingBoxes = new Bounds[leaders.Count + 1];
+        // Goofyf
     }
 
     void Update()
     {
-        beginAnimationLerp = Mathf.Lerp(beginAnimationLerp, 0f, 0.1f);
+        lastSelectedTime += Time.deltaTime;
+        beginAnimationLerp = Mathf.Lerp(beginAnimationLerp, 0f, 0.05f);
         UpdatePositions();
     }
 
@@ -163,19 +192,37 @@ public class MapTilegen2 : MonoBehaviour
                 : x < 0.5f ? Mathf.Pow(2, 20 * x - 10) / 2
                     : (2 - Mathf.Pow(2, -20 * x + 10)) / 2;
     }
+    
+    private Vector3 getPosNoDepth(int x, int z)
+    {
+        return new Vector3((x + z * 0.5f - z / 2) * innerRadius * 2f, z * outerRadius * 2f);
+    }
 
+    private Vector3 getPosition(int x, int z, int ind, float vertical)
+    {
+        return new Vector3((x + z * 0.5f - z / 2) * innerRadius * 2f, depths[ind] * (beginAnimationLerp + extrusion) + vertical, z * outerRadius * 2f);
+    }
+    
     private void UpdatePositions()
     {
         outerRadius = innerRadius * 0.866025404f;
 
+        int selectedLeaderIndex = leaders.IndexOf(gameMan.leader);
+        
         int ind = 0;
         for (int z = 0; z < height; ++z)
         {
             for (int x = 0; x < width - 1; ++x)
             {
-                Vector3 pos = new Vector3((x + z * 0.5f - z / 2) * innerRadius * 2f, depths[ind] * (beginAnimationLerp + extrusion),
-                    z * outerRadius * 2f);
-                sceneTiles[ind].transform.position = pos;
+                float vertical = 0;
+                float lerpSpeed = 10f * Time.deltaTime;
+                if (selectedLeaderIndex >= 0 && tilemap[z][x] == selectedLeaderIndex)
+                {
+                    vertical = 5f + 1 / (1f + lastSelectedTime * 2f);
+                    lerpSpeed *= 3f;
+                }
+                
+                sceneTiles[ind].transform.position = Vector3.Lerp(sceneTiles[ind].transform.position, getPosition(x, z, ind, vertical), lerpSpeed);
                 ++ind;
             }
         }
@@ -183,35 +230,38 @@ public class MapTilegen2 : MonoBehaviour
 
     public void DeselectLand()
     {
+        Debug.Log("???");
         gameMan.LeaderSelected(null);
+    }
+
+    public void OnDrawGizmos()
+    {
+        if (boundingBoxes != null)
+        {
+            for (int i = 0; i < boundingBoxes.Length; ++i)
+            {
+                Bounds b = boundingBoxes[i];
+                Gizmos.DrawWireCube(b.center, b.size);
+            }
+        }
     }
 
     public void SelectTile(int id)
     {
-        /*
-        int x = id / tilemap.Count;
-        int y = id - x * tilemap.Count;
-        int tileID = tilemap[x][y];
-        if (tileID >= 0 && tileID < leaders.Count)
-        {
-            Debug.Log("Stage 2");
-            Debug.Log(leaders[tileID].name);
-            gameMan.LeaderSelected(leaders[tileID]);
-        }
-        */
-        
         int ind = 0;
         for (int i = 0; i < tilemap.Count; ++i)
         {
             for (int j = 0; j < tilemap[i].Count; ++j)
-            {
+            { 
                 if (ind == id)
                 {
                     int tileID = tilemap[i][j];
                                 
                     if (tileID >= 0 && tileID < leaders.Count)
                     {
+                        //Debug.Log(leaders[tileID]);
                         gameMan.LeaderSelected(leaders[tileID]);
+                        lastSelectedTime = 0;
                     }
                     else if (tileID < 0)
                     {
@@ -220,6 +270,18 @@ public class MapTilegen2 : MonoBehaviour
                 }
                 ++ind;
             }
+        }
+    }
+
+    public void Capture(Leader leader)
+    {
+        for (int i = 0; i < tilemap.Count; ++i)
+        {
+            for (int j = 0; j < tilemap[i].Count; ++j)
+            {
+
+            }
+
         }
     }
 }

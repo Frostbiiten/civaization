@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 439321375465577972}
   - component: {fileID: 3582353897912767057}
   - component: {fileID: 1608880911548638875}
-  - component: {fileID: 5269022719111492081}
+  - component: {fileID: 7144393468522124574}
   m_Layer: 6
   m_Name: TileInstance
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3582353897912767057
 MeshFilter:
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &5269022719111492081
-SphereCollider:
+--- !u!65 &7144393468522124574
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,5 +103,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.7, y: 12, z: 1.7}
+  m_Center: {x: 0, y: -6, z: 0.0000006556511}
