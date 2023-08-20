@@ -20,10 +20,10 @@ public class GameManager : MonoBehaviour
 
     List<ChatMessage> messages = new List<ChatMessage>();
 
-    [SerializeField] Leader[] leaders;
+    [SerializeField] Leader[] leaders; 
     Leader leader;
 
-    List<Leader> seqLeaders = new List<Leader>();
+    public List<Leader> seqLeaders = new List<Leader>();
 
     int seqIndex = -1; 
 
@@ -113,6 +113,10 @@ public class GameManager : MonoBehaviour
     }
 
     public void LeaderSelected(Leader _leader) {
+        if (leader.status == "Annexed" || seqIndex < seqLeaders.Count - 1) return; 
+
+        if (_leader == null) Deselect(); 
+
         UI.gameObject.SetActive(true); 
         nameText.text = _leader.name; 
         troopsText.text = "Troops: " + _leader.troops.ToString(); 
@@ -128,8 +132,20 @@ public class GameManager : MonoBehaviour
 
         LeaderSelected(seqLeaders[seqIndex]);
 
-        if (seqIndex < seqLeaders.Count - 1) seqBtn.gameObject.SetActive(true);
-        else seqBtn.gameObject.SetActive(false); 
+        string _action = seqLeaders[seqIndex].action.ToLower(); 
+        if (_action.Contains("loses")) {
+            // This country loses to Canada, big L
+        } else if (_action.Contains("captures") && _action.Contains("canada")) {
+            // Game over
+        }
+
+        if (seqIndex < seqLeaders.Count - 1) {
+            seqBtn.gameObject.SetActive(true);
+            inputMsg.readOnly = true; 
+        } else {
+            seqBtn.gameObject.SetActive(false); 
+            inputMsg.readOnly = false; 
+        }
     }
 
     public void Deselect() {
