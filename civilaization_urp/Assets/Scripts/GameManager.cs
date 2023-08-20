@@ -113,9 +113,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void LeaderSelected(Leader _leader) {
-        if (leader.status == "Annexed" || seqIndex < seqLeaders.Count - 1) return; 
-
+        if (seqIndex < seqLeaders.Count - 1) return; 
         if (_leader == null) Deselect(); 
+        if (leader.status == "Annexed") return; 
 
         UI.gameObject.SetActive(true); 
         nameText.text = _leader.name; 
