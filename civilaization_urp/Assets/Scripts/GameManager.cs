@@ -25,7 +25,9 @@ public class GameManager : MonoBehaviour
 
     public List<Leader> seqLeaders = new List<Leader>();
 
-    int seqIndex = -1; 
+    int seqIndex = -1;
+
+    public bool editeable = true; 
 
     public async void AskGPT(string leader, string msg, string action, string role) {
         ChatMessage newMsg = new ChatMessage();
@@ -132,6 +134,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void ProgressSequence() {
+        if (!editeable) return;
+        editeable = false; 
+
         ++seqIndex;
         Debug.Log(seqLeaders[seqIndex].name);
 
@@ -174,5 +179,9 @@ public class GameManager : MonoBehaviour
             _leader.status = "Neutral";
             _leader.message = ""; 
         }
+    }
+
+    public void GameOver() {
+        // 
     }
 }

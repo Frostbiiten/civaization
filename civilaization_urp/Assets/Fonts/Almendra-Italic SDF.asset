@@ -73,9 +73,9 @@ Material:
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.8333333
+    - _ScaleRatioB: 0.6770833
+    - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -125,7 +125,8 @@ MonoBehaviour:
   materialHashCode: 1852050970
   m_Version: 1.1.0
   m_SourceFontFileGUID: 1c74d6135dd5e08419480904b89637e5
-  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 1c74d6135dd5e08419480904b89637e5, type: 3}
+  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 1c74d6135dd5e08419480904b89637e5,
+    type: 3}
   m_SourceFontFile: {fileID: 0}
   m_AtlasPopulationMode: 0
   m_FaceInfo:
