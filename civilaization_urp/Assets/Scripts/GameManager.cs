@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
 
     public List<Leader> seqLeaders = new List<Leader>();
 
+    [SerializeField] private MapTilegen2 tilegen2;
+
     int seqIndex = -1; 
 
     public async void AskGPT(string leader, string msg, string action, string role) {
@@ -103,7 +105,7 @@ public class GameManager : MonoBehaviour
     {
         var initialPrompt = Resources.Load<TextAsset>("initial");
 
-        UI.gameObject.SetActive(false); 
+        //UI.gameObject.SetActive(false); 
 
         AskGPT(initialPrompt.text, "system"); 
     }
@@ -119,7 +121,7 @@ public class GameManager : MonoBehaviour
             Deselect();
             return; 
         }
-        if (_leader.status == "Annexed") return; 
+        // if (_leader.status == "Annexed") return; 
 
         UI.gameObject.SetActive(true); 
         nameText.text = _leader.name; 
@@ -140,7 +142,7 @@ public class GameManager : MonoBehaviour
         string _action = seqLeaders[seqIndex].action.ToLower(); 
         if (_action.Contains("loses")) 
         {
-            // This country loses to Canada, big L
+            tilegen2.Capture(seqLeaders[seqIndex]);
         }
         else if (_action.Contains("captures") && _action.Contains("canada"))
         {
