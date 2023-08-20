@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
     [SerializeField] private Camera cam;
     [SerializeField] private LayerMask tilesMask;
-    private MapTilegen2 tileGen;
+    [SerializeField] private MapTilegen2 tileGen;
     private RaycastHit info;
 
     // Update is called once per frame
@@ -19,6 +16,10 @@ public class CameraScript : MonoBehaviour
             if (Physics.Raycast(ray, out info, Mathf.Infinity, tilesMask.value))
             {
                 tileGen.SelectTile(int.Parse(info.collider.gameObject.name));
+            }
+            else
+            {
+                tileGen.DeselectLand();
             }
         }
     }

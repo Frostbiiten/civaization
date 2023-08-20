@@ -41,7 +41,7 @@ public class MapTilegen2 : MonoBehaviour
     [SerializeField] private float beginAnimationLerp = 1000f;
     [SerializeField] private float extrusion = 20f;
 
-    private GameManager gameMan;
+    [SerializeField] private GameManager gameMan;
     
     private int totalTiles;
     void LoadJSON()
@@ -181,15 +181,45 @@ public class MapTilegen2 : MonoBehaviour
         }
     }
 
+    public void DeselectLand()
+    {
+        gameMan.LeaderSelected(null);
+    }
+
     public void SelectTile(int id)
     {
-        Debug.Log(id);
-        if (id >= 0 && id < leaders.Count)
+        /*
+        int x = id / tilemap.Count;
+        int y = id - x * tilemap.Count;
+        int tileID = tilemap[x][y];
+        if (tileID >= 0 && tileID < leaders.Count)
         {
-            int x = id / tilemap.Count;
-            int y = id - x * tilemap.Count;
-            int tileID = tilemap[x][y];
+            Debug.Log("Stage 2");
+            Debug.Log(leaders[tileID].name);
             gameMan.LeaderSelected(leaders[tileID]);
+        }
+        */
+        
+        int ind = 0;
+        for (int i = 0; i < tilemap.Count; ++i)
+        {
+            for (int j = 0; j < tilemap[i].Count; ++j)
+            {
+                if (ind == id)
+                {
+                    int tileID = tilemap[i][j];
+                                
+                    if (tileID >= 0 && tileID < leaders.Count)
+                    {
+                        gameMan.LeaderSelected(leaders[tileID]);
+                    }
+                    else if (tileID < 0)
+                    {
+                        DeselectLand();
+                    }
+                }
+                ++ind;
+            }
         }
     }
 }
