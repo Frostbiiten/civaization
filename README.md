@@ -10,6 +10,7 @@ To set up GPT-4, simply:
 {
     "api_key": "{secret key from OpenAI}", 
     "organization": "{your OpenAI organization}"
-}```
+}
+```
 
 Now you should be good to go!
