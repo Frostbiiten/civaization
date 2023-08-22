@@ -1,5 +1,6 @@
 # civilaization
-Hack The 6ix 2023
+Created by: **Arihan Sharma and Edem Hoggar**
+Winner of: **Hack The 6ix 2023**
 
 # INSTRUCTIONS
 To set up GPT-4, simply: 
