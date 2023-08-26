@@ -12,7 +12,7 @@ Saddam Hussein - Leader of Iraq - 350000 troops
 Xi Jin Ping - China - 2500000
 Simón Bolívar - Venezuela - 100000 troops
 Napoleon Bonaparte - France - 200000
-Cleopatra - Egypt - 200000 troops
+Cleopatra - Greece - 200000 troops
 Mahmoud Ahmadinejad - Iran - 600000 troops
 Adolf Hitler - Germany - 3000000 troops
 

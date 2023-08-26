@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using OpenAI;
 using RedOwl.Engine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI; 
 
 public class GameManager : MonoBehaviour
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_InputField inputMsg;
 
     [SerializeField] TextMeshProUGUI responseText, nameText, troopsText, statusText, actionText, userTroopsText;
+    [SerializeField] Image leaderIMG;
 
     [SerializeField] Button seqBtn; 
 
@@ -128,7 +130,8 @@ public class GameManager : MonoBehaviour
         troopsText.text = "Troops: " + _leader.troops.ToString(); 
         statusText.text = "Status: " + _leader.status;
         responseText.text = _leader.message; 
-        actionText.text = _leader.action; 
+        actionText.text = _leader.action;
+        leaderIMG.sprite = _leader.sprite;
 
         leader = _leader; 
     }
@@ -149,6 +152,7 @@ public class GameManager : MonoBehaviour
         }
         else if (_action.Contains("captures") && _action.Contains("canada"))
         {
+            StartCoroutine(ie());
             // Game over
         } else if (_action.Contains("gives"))
         {
@@ -166,6 +170,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public IEnumerator ie()
+    {
+        yield return new WaitForSeconds(5);
+        SceneManager.LoadScene("Game Over");
+    }
+    
     public void Deselect() {
         UI.gameObject.SetActive(false); 
     }

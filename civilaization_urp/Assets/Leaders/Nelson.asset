@@ -17,6 +17,6 @@ MonoBehaviour:
   message: 
   action: 
   troops: 100000
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 959dbdba7a322164890f08a6b7a22664, type: 3}
   material: {fileID: 2100000, guid: 0ff52a5575917fe4faa5b0267b50dfbd, type: 2}
   isoID: ZA

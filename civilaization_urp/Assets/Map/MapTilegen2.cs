@@ -3,6 +3,7 @@ using RedOwl.Engine;
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 struct SceneTile
 {
@@ -62,6 +63,17 @@ public class MapTilegen2 : MonoBehaviour
     [SerializeField] private CameraScript cam;
 
     [SerializeField] private float zoomAmt, unzoomAmt;
+    private int remainingNations;
+
+    public Vector3 GetCenter(int index)
+    {
+        return centers[index];
+    }
+    
+    public int GetLeaderIndex(Leader lead)
+    {
+        return leaders.IndexOf(lead);
+    }
     
     void LoadJSON()
     {
@@ -141,6 +153,8 @@ public class MapTilegen2 : MonoBehaviour
         // Rendering Setup
         sceneTiles = new SceneTile[totalTiles];
         depths = new float[totalTiles];
+
+        remainingNations = leaders.Count - 1;
 
         int saveCuba = 0;
         while (saveCuba < leaders.Count)
@@ -375,6 +389,12 @@ public class MapTilegen2 : MonoBehaviour
         captureID = leaders.IndexOf(leader);
         StartCoroutine(CaptureAnim());
         captureAnimTime = 0;
+        --remainingNations;
+
+        if (remainingNations == 0)
+        {
+            SceneManager.LoadScene("Victory");
+        }
     }
 
     public IEnumerator CaptureAnim()
